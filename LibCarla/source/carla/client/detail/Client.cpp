@@ -9,6 +9,7 @@
 #include "carla/Exception.h"
 #include "carla/Version.h"
 #include "carla/client/TimeoutException.h"
+#include "carla/nav/NavMesh.h"
 #include "carla/rpc/ActorDescription.h"
 #include "carla/rpc/Client.h"
 #include "carla/rpc/DebugShape.h"
@@ -132,6 +133,10 @@ namespace detail {
 
   rpc::MapInfo Client::GetMapInfo() {
     return _pimpl->CallAndWait<rpc::MapInfo>("get_map_info");
+  }
+
+  std::vector<uint8_t> Client::GetNavigationMesh() const {
+    return _pimpl->CallAndWait<std::vector<uint8_t>>("get_navigation_mesh");
   }
 
   std::vector<std::string> Client::GetAvailableMaps() {
@@ -320,6 +325,35 @@ namespace detail {
       bool do_tick_cue) {
     auto result = _pimpl->RawCall("apply_batch", std::move(commands), do_tick_cue);
     return result.as<std::vector<rpc::CommandResponse>>();
+  }
+
+  std::vector<carla::geom::Location> Client::CreateWalker(
+      carla::geom::Location From,
+      carla::geom::Location To) const {
+
+      carla::nav::NavMesh navMesh;
+      std::vector<carla::geom::Location> Path;
+      // carla::geom::Location a, b;
+
+      // get the binary navigation mesh
+      std::vector<uint8_t> BinaryMesh = GetNavigationMesh();
+      logging::log("NAV: BinaryMesh is %d by", BinaryMesh.size());
+      if (!navMesh.Load(BinaryMesh)) {
+        logging::log("NAV: File not found");
+        return Path;
+      }
+
+      // a.x = -141.788834;
+      // a.y = 0.139954;
+      // a.z = -153.839020;
+      // b.x = -29.750393;
+      // b.y = 0.270432;
+      // b.z = -26.876369;
+      if (navMesh.GetPath(From, To, nullptr, Path)) {
+        logging::log("NAV: Path %d (%f,%f,%f)", Path.size(), Path[0].x, Path[0].y, Path[0].z);
+      }
+
+      return Path;
   }
 
   void Client::SendTickCue() {

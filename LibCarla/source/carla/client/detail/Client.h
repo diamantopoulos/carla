@@ -78,6 +78,8 @@ namespace detail {
 
     rpc::MapInfo GetMapInfo();
 
+    std::vector<uint8_t> GetNavigationMesh() const;
+
     std::vector<std::string> GetAvailableMaps();
 
     std::vector<rpc::ActorDefinition> GetActorDefinitions();
@@ -201,6 +203,10 @@ namespace detail {
     std::vector<rpc::CommandResponse> ApplyBatchSync(
         std::vector<rpc::Command> commands,
         bool do_tick_cue);
+
+    std::vector<carla::geom::Location> CreateWalker(
+      carla::geom::Location From,
+      carla::geom::Location To) const;
 
     void SendTickCue();
 
