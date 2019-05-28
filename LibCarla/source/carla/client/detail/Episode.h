@@ -13,6 +13,7 @@
 #include "carla/client/detail/CachedActorList.h"
 #include "carla/client/detail/CallbackList.h"
 #include "carla/client/detail/EpisodeState.h"
+#include "carla/client/detail/WalkerNavigation.h"
 #include "carla/rpc/EpisodeInfo.h"
 
 #include <vector>
@@ -22,6 +23,7 @@ namespace client {
 namespace detail {
 
   class Client;
+  class WalkerNavigation;
 
   /// Holds the current episode, and the current episode state.
   ///
@@ -46,6 +48,8 @@ namespace detail {
     std::shared_ptr<const EpisodeState> GetState() const {
       return _state.load();
     }
+
+    std::shared_ptr<WalkerNavigation> CreateNavigationIfMissing();
 
     void RegisterActor(rpc::Actor actor) {
       _actors.Insert(std::move(actor));
@@ -72,6 +76,8 @@ namespace detail {
     Client &_client;
 
     AtomicSharedPtr<const EpisodeState> _state;
+
+    AtomicSharedPtr<WalkerNavigation> _navigation;
 
     CachedActorList _actors;
 
