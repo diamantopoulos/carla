@@ -204,10 +204,6 @@ namespace detail {
         std::vector<rpc::Command> commands,
         bool do_tick_cue);
 
-    std::vector<carla::geom::Location> CreateWalker(
-      carla::geom::Location From,
-      carla::geom::Location To) const;
-
     void SendTickCue();
 
   private:

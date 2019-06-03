@@ -327,24 +327,6 @@ namespace detail {
     return result.as<std::vector<rpc::CommandResponse>>();
   }
 
-  std::vector<carla::geom::Location> Client::CreateWalker(
-      carla::geom::Location From,
-      carla::geom::Location To) const {
-
-      carla::nav::Navigation Nav;
-      std::vector<carla::geom::Location> Path;
-
-      // get the binary navigation mesh from server
-      Nav.Load(GetNavigationMesh());
-
-      // query the navigation to find a path of points
-      if (!Nav.GetPath(From, To, nullptr, Path)) {
-        logging::log("NAV: Path not found");
-      }
-
-      return Path;
-  }
-
   void Client::SendTickCue() {
     _pimpl->AsyncCall("tick_cue");
   }
