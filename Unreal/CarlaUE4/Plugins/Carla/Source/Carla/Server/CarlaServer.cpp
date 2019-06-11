@@ -12,6 +12,7 @@
 #include "Carla/Util/NavigationMesh.h"
 #include "Carla/Vehicle/CarlaWheeledVehicle.h"
 #include "Carla/Walker/WalkerController.h"
+#include "Carla/Walker/WalkerParent.h"
 
 #include <compiler/disable-ue4-macros.h>
 #include <carla/Functional.h>
@@ -555,6 +556,36 @@ void FCarlaServer::FPimpl::BindActions()
     }
     Controller->ApplyWalkerControl(Control);
     return R<void>::Success();
+  };
+
+  BIND_SYNC(get_walker_base_offset) << [this](
+      cr::ActorId ActorId) -> R<float>
+  {
+    REQUIRE_CARLA_EPISODE();
+    auto ActorView = Episode->FindActor(ActorId);
+    if (!ActorView.IsValid())
+    {
+      RESPOND_ERROR("unable to apply control: actor not found");
+    }
+    auto Pawn = Cast<APawn>(ActorView.GetActor());
+    if (Pawn == nullptr)
+    {
+      RESPOND_ERROR("unable to apply control: actor is not a walker");
+    }
+
+    auto *Character = Cast<AWalkerParent>(Pawn);
+    if (Character == nullptr)
+    {
+      RESPOND_ERROR("Walker is not a character!");
+    }
+    return R<float>(Character->GetBaseOffsetC());
+    // auto *MovementComponent = Character->GetCharacterMovement();
+    // if (MovementComponent == nullptr)
+    // {
+    //   RESPOND_ERROR("Walker missing character movement component!");
+    // }
+
+    // return R<float>(MovementComponent->GetBaseOffset());
   };
 
   BIND_SYNC(set_actor_autopilot) << [this](

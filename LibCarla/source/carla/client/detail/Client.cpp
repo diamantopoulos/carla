@@ -247,6 +247,10 @@ namespace detail {
     _pimpl->AsyncCall("apply_control_to_walker", walker, control);
   }
 
+  float Client::GetWalkerBaseOffset(rpc::ActorId walker) {
+    return _pimpl->CallAndWait<float>("get_walker_base_offset", walker);
+  }
+
   void Client::SetTrafficLightState(
       rpc::ActorId traffic_light,
       const rpc::TrafficLightState traffic_light_state) {
