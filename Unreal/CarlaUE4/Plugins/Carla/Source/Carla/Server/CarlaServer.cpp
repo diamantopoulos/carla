@@ -12,7 +12,6 @@
 #include "Carla/Util/NavigationMesh.h"
 #include "Carla/Vehicle/CarlaWheeledVehicle.h"
 #include "Carla/Walker/WalkerController.h"
-#include "Carla/Walker/WalkerParent.h"
 
 #include <compiler/disable-ue4-macros.h>
 #include <carla/Functional.h>
@@ -38,6 +37,8 @@
 #include <carla/rpc/WeatherParameters.h>
 #include <carla/streaming/Server.h>
 #include <compiler/enable-ue4-macros.h>
+
+#include "Components/CapsuleComponent.h"
 
 #include <vector>
 
@@ -565,27 +566,26 @@ void FCarlaServer::FPimpl::BindActions()
     auto ActorView = Episode->FindActor(ActorId);
     if (!ActorView.IsValid())
     {
-      RESPOND_ERROR("unable to apply control: actor not found");
+      RESPOND_ERROR("unable to get bounding box: actor view is invalid");
     }
-    auto Pawn = Cast<APawn>(ActorView.GetActor());
-    if (Pawn == nullptr)
+    auto Actor = Cast<AActor>(ActorView.GetActor());
+    if (Actor == nullptr)
     {
-      RESPOND_ERROR("unable to apply control: actor is not a walker");
+      RESPOND_ERROR("unable to get bounding box: actor not found");
     }
-
-    auto *Character = Cast<AWalkerParent>(Pawn);
-    if (Character == nullptr)
+    UCapsuleComponent *Capsule;
+    Capsule = Actor->FindComponentByClass<UCapsuleComponent>();
+    if (Capsule == nullptr)
     {
-      RESPOND_ERROR("Walker is not a character!");
+      RESPOND_ERROR("unable to get bounding box: no capsule component");
     }
-    return R<float>(Character->GetBaseOffsetC());
-    // auto *MovementComponent = Character->GetCharacterMovement();
-    // if (MovementComponent == nullptr)
-    // {
-    //   RESPOND_ERROR("Walker missing character movement component!");
-    // }
-
-    // return R<float>(MovementComponent->GetBaseOffset());
+    return R<float>(Capsule->GetScaledCapsuleHalfHeight());
+    /*
+    FVector Origin;
+    FVector Box;
+    Actor->GetActorBounds(true, Origin, Box);
+    return R<float>(Box.Z);
+    */
   };
 
   BIND_SYNC(set_actor_autopilot) << [this](
