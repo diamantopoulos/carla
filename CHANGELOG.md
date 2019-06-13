@@ -1,5 +1,8 @@
 ## Latest
 
+  * Added pedestrian support:
+    - We can spawn pedestrians that will walk over sidewalks at random points continually.
+    - There is a support script to spawn pedestrians, called 'spawn_pedestrians.py'
   * Vulkan support: Changed project settings to make vulkan default on linux and updated make script to allow user to select opengl
   * Add ability to set motion blur settings for rgb camera in sensor python blueprint
   * Improved visual quality of the screen capture for the rgb sensor
