@@ -78,6 +78,14 @@ namespace rpc {
       MSGPACK_DEFINE_ARRAY(actor, transform);
     };
 
+    struct ApplyTransform2D : CommandBase<ApplyTransform2D> {
+      ApplyTransform2D() = default;
+      ApplyTransform2D(ActorId id, const geom::Transform &value) : actor(id), transform(value) {}
+      ActorId actor;
+      geom::Transform transform;
+      MSGPACK_DEFINE_ARRAY(actor, transform);
+    };
+
     struct ApplyVelocity : CommandBase<ApplyVelocity> {
       ApplyVelocity() = default;
       ApplyVelocity(ActorId id, const geom::Vector3D &value) : actor(id), velocity(value) {}
@@ -124,6 +132,7 @@ namespace rpc {
         ApplyVehicleControl,
         ApplyWalkerControl,
         ApplyTransform,
+        ApplyTransform2D,
         ApplyVelocity,
         ApplyAngularVelocity,
         ApplyImpulse,
