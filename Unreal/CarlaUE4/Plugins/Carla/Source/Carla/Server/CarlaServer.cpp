@@ -608,12 +608,6 @@ void FCarlaServer::FPimpl::BindActions()
       RESPOND_ERROR("unable to get bounding box: no capsule component");
     }
     return R<float>(Capsule->GetScaledCapsuleHalfHeight());
-    /*
-    FVector Origin;
-    FVector Box;
-    Actor->GetActorBounds(true, Origin, Box);
-    return R<float>(Box.Z);
-    */
   };
 
   BIND_SYNC(set_actor_autopilot) << [this](
