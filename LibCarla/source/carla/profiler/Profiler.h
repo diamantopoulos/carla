@@ -7,6 +7,10 @@
 #pragma once
 
 #ifndef LIBCARLA_ENABLE_PROFILER
+#define LIBCARLA_ENABLE_PROFILER
+#endif
+
+#ifndef LIBCARLA_ENABLE_PROFILER
 #  define CARLA_PROFILE_SCOPE(context, profiler_name)
 #  define CARLA_PROFILE_FPS(context, profiler_name)
 #else

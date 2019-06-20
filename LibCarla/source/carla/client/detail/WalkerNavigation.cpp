@@ -8,6 +8,7 @@
 
 #include "carla/client/detail/Client.h"
 #include "carla/client/detail/EpisodeState.h"
+#include "carla/profiler/Profiler.h"
 #include "carla/rpc/Command.h"
 #include "carla/rpc/WalkerControl.h"
 
@@ -25,6 +26,8 @@ namespace detail {
     if (walkers->empty()) {
       return;
     }
+
+    CARLA_PROFILE_SCOPE(WalkerNavigation, Tick);
 
     // update crowd in navigation module
     _nav.UpdateCrowd(state);

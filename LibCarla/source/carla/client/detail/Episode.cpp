@@ -8,6 +8,7 @@
 
 #include "carla/Logging.h"
 #include "carla/client/detail/Client.h"
+#include "carla/profiler/Profiler.h"
 #include "carla/sensor/Deserializer.h"
 
 #include <exception>
@@ -51,6 +52,8 @@ namespace detail {
     _client.SubscribeToStream(_token, [weak](auto buffer) {
       auto self = weak.lock();
       if (self != nullptr) {
+        CARLA_PROFILE_SCOPE(Episode, Tick);
+
         auto data = sensor::Deserializer::Deserialize(std::move(buffer));
 
         auto next = std::make_shared<const EpisodeState>(CastData(*data));

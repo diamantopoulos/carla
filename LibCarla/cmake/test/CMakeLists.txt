@@ -12,8 +12,6 @@ link_directories(
     ${GTEST_LIB_PATH})
 
 file(GLOB libcarla_test_sources
-    "${libcarla_source_path}/carla/profiler/*.cpp"
-    "${libcarla_source_path}/carla/profiler/*.h"
     "${libcarla_source_path}/test/*.cpp"
     "${libcarla_source_path}/test/*.h"
     "${libcarla_source_path}/test/${carla_config}/*.cpp"

@@ -172,6 +172,12 @@ file(GLOB libcarla_carla_streaming_detail_sources
 set(libcarla_sources "${libcarla_sources};${libcarla_carla_streaming_detail_sources}")
 install(FILES ${libcarla_carla_streaming_detail_sources} DESTINATION include/carla/streaming/detail)
 
+file(GLOB libcarla_carla_streaming_detail_sources
+    "${libcarla_source_path}/carla/profiler/*.cpp"
+    "${libcarla_source_path}/carla/profiler/*.h")
+set(libcarla_sources "${libcarla_sources};${libcarla_carla_streaming_detail_sources}")
+install(FILES ${libcarla_carla_streaming_detail_sources} DESTINATION include/carla/streaming/detail)
+
 file(GLOB libcarla_carla_streaming_detail_tcp_sources
     "${libcarla_source_path}/carla/streaming/detail/tcp/*.cpp"
     "${libcarla_source_path}/carla/streaming/detail/tcp/*.h")

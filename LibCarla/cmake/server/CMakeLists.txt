@@ -92,6 +92,8 @@ file(GLOB libcarla_server_sources
     "${libcarla_source_path}/carla/Exception.cpp"
     "${libcarla_source_path}/carla/geom/*.cpp"
     "${libcarla_source_path}/carla/geom/*.h"
+    "${libcarla_source_path}/carla/profiler/*.cpp"
+    "${libcarla_source_path}/carla/profiler/*.h"
     "${libcarla_source_path}/carla/opendrive/*.cpp"
     "${libcarla_source_path}/carla/opendrive/*.h"
     "${libcarla_source_path}/carla/opendrive/parser/*.cpp"
